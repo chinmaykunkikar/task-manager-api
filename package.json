@@ -1,0 +1,24 @@
+{
+  "name": "airtribe-task-manager-api",
+  "version": "0.0.0",
+  "description": "RESTful API for a simple task manager application",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinmaykunkikar/task-manager-api.git"
+  },
+  "author": "Chinmay Kunkikar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chinmaykunkikar/task-manager-api/issues"
+  },
+  "homepage": "https://github.com/chinmaykunkikar/task-manager-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1"
+  }
+}
