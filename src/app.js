@@ -12,6 +12,7 @@ const ajv = new Ajv();
 const taskSchema = {
   type: "object",
   properties: {
+    id: { type: "string", minLength: 1 },
     title: { type: "string", minLength: 1 },
     description: { type: "string", minLength: 1 },
     completed: { type: "boolean" },
@@ -20,9 +21,17 @@ const taskSchema = {
   additionalProperties: false,
 };
 
-// retrieve all tasks
+// GET retrieve all tasks
 app.get("/tasks", (req, res) => {
   res.status(200).json(tasks);
+});
+
+// POST create a new task
+app.post("/tasks", (req, res) => {
+  const newTask = req.body;
+  const validBody = ajv.validate(taskSchema, newTask);
+  if (validBody) res.status(201).json(newTask);
+  res.status(400).json({ message: "Task data is not valid" });
 });
 
 app.listen(3000, () => {
