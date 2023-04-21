@@ -14,7 +14,7 @@ const ajv = new Ajv();
 const taskSchema = {
   type: "object",
   properties: {
-    id: { type: "number", minLength: 1 },
+    id: { type: "string", minLength: 1 },
     title: { type: "string", minLength: 1 },
     description: { type: "string", minLength: 1 },
     completed: { type: "boolean" },
@@ -26,6 +26,17 @@ const taskSchema = {
 // GET retrieve all tasks
 app.get("/tasks", (req, res) => {
   res.status(200).json(tasks);
+});
+
+// GET retrieve a single task by ID
+app.get("/tasks/:id", (req, res) => {
+  const taskId = req.params.id;
+  const task = tasks.tasks.find((task) => task.id === taskId);
+  if (task) {
+    res.status(200).json(task);
+  } else {
+    res.status(404).json({ message: "Task not found" });
+  }
 });
 
 // POST create a new task
