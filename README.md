@@ -48,25 +48,25 @@
 
 1. **`GET /tasks`**
 
-```curl
+```bash
 curl --location "localhost:3000/tasks?completed=false&sort=1"
 ```
 
 2. **`GET /tasks/:id`**
 
-```curl
+```bash
 curl --location "localhost:3000/tasks/5"
 ```
 
 3. **`GET /tasks/priority/:level`**
 
-```curl
+```bash
 curl --location "localhost:3000/tasks/priority/high"
 ```
 
 4. **`POST /tasks`**
 
-```curl
+```bash
 curl --location 'localhost:3000/tasks' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -79,13 +79,13 @@ curl --location 'localhost:3000/tasks' \
 
 5. **`DELETE /tasks/:id`**
 
-```curl
+```bash
 curl --location --request DELETE "localhost:3000/tasks/2"
 ```
 
 6. **`PUT /tasks/:id`**
 
-```curl
+```bash
 curl --location --request PUT 'localhost:3000/tasks/2' \
 --header 'Content-Type: application/json' \
 --data '{
