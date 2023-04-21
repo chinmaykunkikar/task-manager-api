@@ -65,6 +65,15 @@ app.get("/tasks/:id", (req, res) => {
   }
 });
 
+// GET retrieve tasks based on priority level
+app.get("/tasks/priority/:level", (req, res) => {
+  const priorityLevel = req.params.level;
+  const filteredTasks = tasksData.tasks.filter(
+    (task) => task.priority === priorityLevel
+  );
+  res.status(200).json(filteredTasks);
+});
+
 // POST create a new task
 app.post("/tasks", (req, res) => {
   const newTask = req.body;
