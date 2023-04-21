@@ -21,8 +21,9 @@ const taskSchema = {
     title: { type: "string", minLength: 1 },
     description: { type: "string", minLength: 1 },
     completed: { type: "boolean" },
+    priority: { type: "string", enum: ["low", "medium", "high"] },
   },
-  required: ["title", "description", "completed"],
+  required: ["title", "description", "completed", "priority"],
   additionalProperties: false,
 };
 
