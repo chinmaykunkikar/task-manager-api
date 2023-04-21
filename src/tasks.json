@@ -8,10 +8,10 @@
       "createdAt": 1682108078225
     },
     {
-      "id": "2",
       "title": "Task 2",
-      "description": "This is task 2",
+      "description": "Task 2.5",
       "completed": true,
+      "id": "2",
       "createdAt": 1682108086551
     },
     {

@@ -105,6 +105,7 @@ app.put("/tasks/:id", (req, res) => {
     );
     if (taskIndex !== -1) {
       updatedTask.id = taskId;
+      updatedTask.createdAt = tasksModified.tasks[taskIndex].createdAt;
       tasksModified.tasks[taskIndex] = updatedTask;
       writeFileSyncWrapper(TASKS_JSON, JSON.stringify(tasksModified));
       res.status(200).json(updatedTask);
