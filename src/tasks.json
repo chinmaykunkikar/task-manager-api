@@ -1,12 +1,6 @@
 {
   "tasks": [
     {
-      "id": "2",
-      "title": "Task 2",
-      "description": "This is task 2",
-      "completed": true
-    },
-    {
       "id": "3",
       "title": "Task 3",
       "description": "This is task 3",
@@ -23,6 +17,18 @@
       "title": "Task 5",
       "description": "This is task 5",
       "completed": true
+    },
+    {
+      "id": "1",
+      "title": "Task 1",
+      "description": "This is task 1",
+      "completed": true
+    },
+    {
+      "title": "Task 2",
+      "description": "Task 2.5",
+      "completed": true,
+      "id": "2"
     }
   ]
 }

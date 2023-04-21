@@ -3,13 +3,16 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const tasks = require("./tasks.json");
 
 const app = express();
 
 app.use(bodyParser.json());
 
 const ajv = new Ajv();
+
+const TASKS_JSON = path.join(__dirname, "tasks.json");
+const dataFile = fs.readFileSync(TASKS_JSON, "utf-8");
+const tasksData = JSON.parse(dataFile);
 
 const taskSchema = {
   type: "object",
@@ -23,15 +26,22 @@ const taskSchema = {
   additionalProperties: false,
 };
 
+function writeFileSyncWrapper(file, data) {
+  fs.writeFileSync(file, data, {
+    encoding: "utf8",
+    flag: "w",
+  });
+}
+
 // GET retrieve all tasks
 app.get("/tasks", (req, res) => {
-  res.status(200).json(tasks);
+  res.status(200).json(tasksData);
 });
 
 // GET retrieve a single task by ID
 app.get("/tasks/:id", (req, res) => {
   const taskId = req.params.id;
-  const task = tasks.tasks.find((task) => task.id === taskId);
+  const task = tasksData.tasks.find((task) => task.id === taskId);
   if (task) {
     res.status(200).json(task);
   } else {
@@ -42,15 +52,11 @@ app.get("/tasks/:id", (req, res) => {
 // POST create a new task
 app.post("/tasks", (req, res) => {
   const newTask = req.body;
-  let writePath = path.join(__dirname, "..", "tasks.json");
-  let tasksModified = JSON.parse(JSON.stringify(tasks));
+  let tasksModified = JSON.parse(JSON.stringify(tasksData));
   const validBody = ajv.validate(taskSchema, newTask);
   if (validBody) {
     tasksModified.tasks.push(newTask);
-    fs.writeFileSync(writePath, JSON.stringify(tasksModified), {
-      encoding: "utf8",
-      flag: "w",
-    });
+    writeFileSyncWrapper(TASKS_JSON, JSON.stringify(tasksModified));
     res.status(201).json(newTask);
   } else {
     res.status(400).json({ message: "Invalid task data" });
@@ -60,15 +66,11 @@ app.post("/tasks", (req, res) => {
 // DELETE delete a task by ID
 app.delete("/tasks/:id", (req, res) => {
   const taskId = req.params.id;
-  const taskIndex = tasks.tasks.findIndex((task) => task.id === taskId);
-  let writePath = path.join(__dirname, ".", "tasks.json");
-  let tasksModified = JSON.parse(JSON.stringify(tasks));
+  const taskIndex = tasksData.tasks.findIndex((task) => task.id === taskId);
+  let tasksModified = JSON.parse(JSON.stringify(tasksData));
   if (taskIndex !== -1) {
     tasksModified.tasks.splice(taskIndex, 1);
-    fs.writeFileSync(writePath, JSON.stringify(tasksModified), {
-      encoding: "utf8",
-      flag: "w",
-    });
+    writeFileSyncWrapper(TASKS_JSON, JSON.stringify(tasksModified));
     res.status(200).json({ message: "Task deleted" });
   } else {
     res.status(404).json({ message: "Task not found" });
@@ -79,8 +81,7 @@ app.delete("/tasks/:id", (req, res) => {
 app.put("/tasks/:id", (req, res) => {
   const taskId = req.params.id;
   const updatedTask = req.body;
-  let writePath = path.join(__dirname, "..", "tasks.json");
-  let tasksModified = JSON.parse(JSON.stringify(tasks));
+  let tasksModified = JSON.parse(JSON.stringify(tasksData));
   const valid = ajv.validate(taskSchema, updatedTask);
   if (valid) {
     const taskIndex = tasksModified.tasks.findIndex(
@@ -89,10 +90,7 @@ app.put("/tasks/:id", (req, res) => {
     if (taskIndex !== -1) {
       updatedTask.id = taskId;
       tasksModified.tasks[taskIndex] = updatedTask;
-      fs.writeFileSync(writePath, JSON.stringify(tasksModified), {
-        encoding: "utf8",
-        flag: "w",
-      });
+      writeFileSyncWrapper(TASKS_JSON, JSON.stringify(tasksModified));
       res.status(200).json(updatedTask);
     } else {
       res.status(404).json({ message: "Task not found" });
