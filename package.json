@@ -1,6 +1,6 @@
 {
   "name": "airtribe-task-manager-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "RESTful API for a simple task manager application",
   "main": "src/app.js",
   "scripts": {
