@@ -36,16 +36,14 @@ function writeFileSyncWrapper(file, data) {
 // GET retrieve all tasks
 app.get("/tasks", (req, res) => {
   const { completed } = req.query;
+  let isCompleted =
+    completed === undefined || completed.toLowerCase() === "false"
+      ? false
+      : true;
   let filteredTasks = tasksData;
-  if (
-    completed.toLowerCase() === "true" ||
-    completed.toLowerCase() === "false"
-  ) {
-    filteredTasks = filteredTasks.tasks.filter(
-      (task) =>
-        task.completed === (completed.toLowerCase() === "true" ? true : false)
-    );
-  }
+  filteredTasks = filteredTasks.tasks.filter(
+    (task) => task.completed === isCompleted
+  );
 
   res.json(filteredTasks);
 });
