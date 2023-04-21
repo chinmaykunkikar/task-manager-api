@@ -102,6 +102,12 @@ app.put("/tasks/:id", (req, res) => {
   }
 });
 
+// Handle other errors
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Internal server error" });
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
