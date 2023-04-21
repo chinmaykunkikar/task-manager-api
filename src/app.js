@@ -75,6 +75,33 @@ app.delete("/tasks/:id", (req, res) => {
   }
 });
 
+// PUT update an existing task by ID
+app.put("/tasks/:id", (req, res) => {
+  const taskId = req.params.id;
+  const updatedTask = req.body;
+  let writePath = path.join(__dirname, "..", "tasks.json");
+  let tasksModified = JSON.parse(JSON.stringify(tasks));
+  const valid = ajv.validate(taskSchema, updatedTask);
+  if (valid) {
+    const taskIndex = tasksModified.tasks.findIndex(
+      (task) => task.id === taskId
+    );
+    if (taskIndex !== -1) {
+      updatedTask.id = taskId;
+      tasksModified.tasks[taskIndex] = updatedTask;
+      fs.writeFileSync(writePath, JSON.stringify(tasksModified), {
+        encoding: "utf8",
+        flag: "w",
+      });
+      res.status(200).json(updatedTask);
+    } else {
+      res.status(404).json({ message: "Task not found" });
+    }
+  } else {
+    res.status(400).json({ message: "Invalid task data" });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
