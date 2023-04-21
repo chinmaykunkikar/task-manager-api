@@ -1,12 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const tasksData = require("./tasks.json");
+const tasks = require("./tasks.json");
 
 const app = express();
 
 app.use(bodyParser.json());
-
-const tasks = JSON.parse(tasksData);
 
 // retrieve all tasks
 app.get("/tasks", (req, res) => {
