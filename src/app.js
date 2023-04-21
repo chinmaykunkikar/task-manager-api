@@ -57,6 +57,24 @@ app.post("/tasks", (req, res) => {
   }
 });
 
+// DELETE delete a task by ID
+app.delete("/tasks/:id", (req, res) => {
+  const taskId = req.params.id;
+  const taskIndex = tasks.tasks.findIndex((task) => task.id === taskId);
+  let writePath = path.join(__dirname, ".", "tasks.json");
+  let tasksModified = JSON.parse(JSON.stringify(tasks));
+  if (taskIndex !== -1) {
+    tasksModified.tasks.splice(taskIndex, 1);
+    fs.writeFileSync(writePath, JSON.stringify(tasksModified), {
+      encoding: "utf8",
+      flag: "w",
+    });
+    res.status(200).json({ message: "Task deleted" });
+  } else {
+    res.status(404).json({ message: "Task not found" });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
