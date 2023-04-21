@@ -35,7 +35,8 @@ function writeFileSyncWrapper(file, data) {
 
 // GET retrieve all tasks
 app.get("/tasks", (req, res) => {
-  const { completed } = req.query;
+  const { completed, sort } = req.query;
+  console.log(sort);
   let isCompleted =
     completed === undefined || completed.toLowerCase() === "false"
       ? false
@@ -44,6 +45,10 @@ app.get("/tasks", (req, res) => {
   filteredTasks = filteredTasks.tasks.filter(
     (task) => task.completed === isCompleted
   );
+
+  if (sort !== undefined) {
+    filteredTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
 
   res.json(filteredTasks);
 });
@@ -65,6 +70,7 @@ app.post("/tasks", (req, res) => {
   let tasksModified = JSON.parse(JSON.stringify(tasksData));
   const validBody = ajv.validate(taskSchema, newTask);
   if (validBody) {
+    newTask.createdAt = Date.now();
     tasksModified.tasks.push(newTask);
     writeFileSyncWrapper(TASKS_JSON, JSON.stringify(tasksModified));
     res.status(201).json(newTask);
